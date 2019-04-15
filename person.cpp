@@ -20,7 +20,11 @@ int Person::getId() {
 }
 
 void Person::setActive(bool act) {
-    act = true;
+    if(act){
+      active = true;
+    } else {
+      active = false;
+    }
 }
 
 bool Person::isActive() {
