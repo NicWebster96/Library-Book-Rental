@@ -34,6 +34,7 @@ Person * searchPerson(vector<Person *> myCardholders, int id) {
 
 int askCardID(vector<Person *> myCardholders) {
   int cardID;
+
   cout << "Please enter the card ID: ";
   cin >> setw(4) >> cardID;
 
@@ -97,6 +98,10 @@ void bookCheckout(vector<Book *> myBooks, vector<Person *> myCardholders,
 
   for(int i=0; i<myBooks.size(); i++) {
     if (myBooks.at(i)->getId() == bID) {
+      if (myBooks.at(i)->getPersonPtr() != nullptr) {
+        cout << "Book already checked out" << endl;
+        return;
+      }
       myBooks.at(i)->setPersonPtr(tmpPerson);
       cout << "Rental Completed" << endl;
       return;
