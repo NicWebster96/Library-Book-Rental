@@ -295,7 +295,6 @@ void readRentals(vector<Book *> & myBooks, vector<Person *> myCardholders) {
 }
 
 /******************************************************************************/
-/* Main */
 
 int main() {
 
