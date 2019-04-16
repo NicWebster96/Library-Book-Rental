@@ -20,15 +20,16 @@ int Person::getId() {
 }
 
 void Person::setActive(bool act) {
-    if(act){
+    if(act == 1){
       active = true;
-    } else {
-      active = false;
+      return;
     }
+    active = false;
 }
 
 bool Person::isActive() {
-    if(active) {return true;}
+    if(active == 1) {return true;}
+    return false;
 }
 
 string Person::fullName() {
