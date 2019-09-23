@@ -1,5 +1,5 @@
 // Nicholas Webster
-// Section 1
+
 #include <iostream>
 #include <fstream>
 #include <string>
