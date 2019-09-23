@@ -1,4 +1,4 @@
-# CPSC 301, Spring 2019
+# CPSC 301
 
 ## Nicholas Webster
 
