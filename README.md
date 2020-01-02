@@ -1,11 +1,11 @@
-# CPSC 301
+# Library Book Rental System
 
 ## Nicholas Webster
 
-### Final Project
-Simulation of a public library's book rental system. The persons, books, and association between the books and persons are given in text files. Options are provided for various user tasks.
-When books are checked out, they are pointed to a specific user ID.
+Simulation of a library's book rental system. The persons, books, and rentals are given in text files. Options are provided to the user for various user tasks. Each user and book has a unique ID.
 
-Dynamically allocated vectors of pointers to persons/books were utilized for the final submission of this project. (Spring 2019)
+# Spring 2019
+Vectors are utilized for the initial implementation of this project.
 
-Was later implemented using a multimap for efficiecy purposes. (Spring 2020)
+# Spring 2020
+Implemented using a multimap. This allows for quicker search, add, and removal of data.
