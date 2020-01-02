@@ -1,9 +1,9 @@
 #include "person.h"
 
-Person::Person(int cardNo, bool act, string fName, string lName) {
+Person::Person(string fName, string lName, int cardNum, bool act) {
     firstName = fName;
     lastName = lName;
-    cardID = cardNo;
+    cardID = cardNum;
     active = act;
 }
 
@@ -25,11 +25,11 @@ void Person::setActive(bool act) {
       return;
     }
     active = false;
+    return;
 }
 
 bool Person::isActive() {
-    if(active == 1) {return true;}
-    return false;
+    return active;
 }
 
 string Person::fullName() {

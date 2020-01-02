@@ -1,4 +1,4 @@
-// Nicholas Webster
+// Created by Nicholas Webster
 
 #include <iostream>
 #include <fstream>

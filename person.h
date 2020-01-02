@@ -15,12 +15,12 @@ private:
     bool   active;
 
 public:
-    Person (int cardNo, bool act, string fName, string lName);
+    Person (string firstName, string lastName, int cardNumber, bool isActive);
     string getFirstName();
     string getLastName();
     int    getId();
-	  void   setActive(bool act);
-	  bool   isActive();
+	void   setActive(bool act);
+	bool   isActive();
     string fullName();
 };
 #endif // end person.h

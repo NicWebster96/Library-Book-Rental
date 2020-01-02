@@ -1,9 +1,9 @@
 #include "book.h"
 
-Book::Book(int id, string bookName, string auth, string cat) {
-    title = bookName;
-    author = auth;
-    category = cat;
+Book::Book(int id, string bookTitle, string bookAuth, string bookCat) {
+    title = bookTitle;
+    author = bookAuth;
+    category = bookCat;
     bookID = id;
 }
 
