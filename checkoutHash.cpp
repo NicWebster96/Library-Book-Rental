@@ -17,23 +17,29 @@ const int ID_LENGTH = 4;
 const int ID_MIN = 1000;
 
 /******************************************************************************/
-/* Ask, search, and outputs */
+/* Ask, search, and output functions */
+   // Within the book and person functions, the input is taken from the user and
+   // the multimap is searched for the corresponding ID. In the event that the
+   // ID is already known, the overloaded function will not ask for an ID.
 
 Book * askForIdRetBookPtr(multimap<int, Book *> myBooks) {
 
   int bookID;
+
   cout << "\nPlease enter the book ID: ";
   cin >> setw(ID_LENGTH) >> bookID;
 
   int mapKey = bookID % HASH_SIZE;
   auto mapIter = myBooks.equal_range(mapKey);
 
-  for( auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter ) {
+  for(auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter) {
     auto const& item = vecIter->second;
-    if( item->getId() == bookID) {
+    if(item->getId() == bookID) {
+      // return pointer to the book
       return item;
     }
   }
+
   cout << "Book ID not found" << endl;
   return nullptr;
 }
@@ -43,12 +49,14 @@ Book * askForIdRetBookPtr(multimap<int, Book *> myBooks, int bookID) {
   int mapKey = bookID % HASH_SIZE;
   auto mapIter = myBooks.equal_range(mapKey);
 
-  for( auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter ) {
+  for(auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter) {
     auto const& item = vecIter->second;
-    if( item->getId() == bookID) {
+    if(item->getId() == bookID) {
+      // return pointer to the book
       return item;
     }
   }
+
   cout << "Book ID not found" << endl;
   return nullptr;
 }
@@ -56,20 +64,21 @@ Book * askForIdRetBookPtr(multimap<int, Book *> myBooks, int bookID) {
 Person * askForIdRetPersonPtr(multimap<int, Person *> myCardholders) {
 
   int personID;
+
   cout << "\nPlease enter your library ID: ";
   cin >> setw(ID_LENGTH) >> personID;
 
   int mapKey = personID % HASH_SIZE;
   auto mapIter = myCardholders.equal_range(mapKey);
 
-  for( auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter ) {
+  for(auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter) {
     auto const& item = vecIter->second;
-    if( item->getId() == personID) {
+    if(item->getId() == personID) {
       // return pointer to the person
       return item;
     }
   }
-  // no person has the entered card id
+
   cout << "\nPerson not found" << endl;
   return nullptr;
 }
@@ -79,26 +88,33 @@ Person * askForIdRetPersonPtr(multimap<int, Person *> myCardholders, int personI
   int mapKey = personID % HASH_SIZE;
   auto mapIter = myCardholders.equal_range(mapKey);
 
-  for( auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter ) {
+  for(auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter) {
     auto const& item = vecIter->second;
-    if( item->getId() == personID) {
+    if(item->getId() == personID) {
       // return pointer to the person
       return item;
     }
   }
-  // no person has the entered card id
+
   cout << "\nPerson not found" << endl;
   return nullptr;
 }
 
 void printBookInfo(Book * tmpBook, int amtOfInfo) {
+  // If the user's Card ID and name are desired, pass in 5 for amtOfInfo.
+  // If the book's info including category are desired, pass in 4.
+  // If just the ID, Title, and Author are desired, pass in 3.
   cout << "\n   Book ID: " << tmpBook->getId();
   cout << "\n     Title: " << tmpBook->getTitle();
   cout << "\n    Author: " << tmpBook->getAuthor();
-  cout << "\nCardholder: " << tmpBook->getPersonPtr()->fullName();
+
+  if(amtOfInfo == 4) {
+    cout << "\n  Category: " << tmpBook->getCategory() << "\n";
+  }
 
   if(amtOfInfo == 5) {
-    cout << "\n   Card ID: " << tmpBook->getPersonPtr()->getId();
+    cout << "\nCardholder: " << tmpBook->getPersonPtr()->fullName();
+    cout << "\n   Card ID: " << tmpBook->getPersonPtr()->getId() << "\n";
   }
   return;
 }
@@ -108,25 +124,22 @@ void printBookInfo(Book * tmpBook, int amtOfInfo) {
 
 // 1
 void checkoutBook(Person * tmpPerson, Book * tmpBook) {
-  if(tmpPerson == nullptr){return;}
-  if(tmpBook == nullptr){return;}
+  if(tmpPerson == nullptr || tmpBook == nullptr){return;}
 
   if(tmpBook->getPersonPtr() != nullptr) {
     cout << "\nBook already checked out!";
-  } else {
-    tmpBook->setPersonPtr(tmpPerson);
-    cout << "\nCheckout Completed!\n";
-    cout << tmpBook->getPersonPtr()->fullName() << " has checked out ";
-    cout << tmpBook->getTitle();
     return;
   }
+
+  tmpBook->setPersonPtr(tmpPerson);
+  cout << "\nCheckout Completed!\n";
+  cout << tmpBook->getPersonPtr()->fullName() << " has checked out ";
+  cout << tmpBook->getTitle();
 }
 
 // 2
 void returnBook(Book * tmpBook) {
-  if(tmpBook == nullptr){
-    return;
-  }
+  if(tmpBook == nullptr){return;}
 
   if(!tmpBook->getPersonPtr()) {
     cout << "\nBook is not checked out";
@@ -134,9 +147,9 @@ void returnBook(Book * tmpBook) {
   }
 
   cout << "\nUser: " << tmpBook->getPersonPtr()->fullName();
+  cout << "\nBook: " << tmpBook->getTitle();
   tmpBook->setPersonPtr(nullptr);
   cout << "\nReturn Completed!";
-  return;
 }
 
 // 3
@@ -146,11 +159,13 @@ void printAllAvailableBooks(multimap<int, Book *> myBooks) {
     return;
   }
 
+  // Iterate through entire book multimap. If the book is available,
+  // prints the book information
   for(int i = 0; i < HASH_SIZE; ++i) {
     auto mapIter = myBooks.equal_range(i);
-    for( auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter ) {
+    for(auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter) {
       auto const& item = vecIter->second;
-      if( item->getPersonPtr() == nullptr) {
+      if(item->getPersonPtr() == nullptr) {
         printBookInfo(item, 4);
       }
     }
@@ -164,9 +179,9 @@ void printAllRentedBooks(multimap<int, Book *> myBooks) {
 
   for(int i = 0; i < HASH_SIZE; ++i) {
     auto mapIter = myBooks.equal_range(i);
-    for( auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter ) {
+    for(auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter) {
       auto const& item = vecIter->second;
-      if( item->getPersonPtr() != nullptr) {
+      if(item->getPersonPtr() != nullptr) {
         printBookInfo(item, 5);
         count++;
       }
@@ -179,9 +194,7 @@ void printAllRentedBooks(multimap<int, Book *> myBooks) {
 // 5
 void printPersonsRentals(Person * tmpPerson, multimap<int, Book *> myBooks) {
 
-  if(tmpPerson == nullptr){
-    return;
-  }
+  if(tmpPerson == nullptr){return;}
 
   cout << "\nBooks checked out for " << tmpPerson->fullName() << ":";
 
@@ -189,18 +202,16 @@ void printPersonsRentals(Person * tmpPerson, multimap<int, Book *> myBooks) {
 
   for(int i = 0; i < HASH_SIZE; ++i) {
     auto mapIter = myBooks.equal_range(i);
-    for( auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter ) {
+    for(auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter) {
       auto const& item = vecIter->second;
-      if( item->getPersonPtr() == tmpPerson) {
+      if(item->getPersonPtr() == tmpPerson) {
         printBookInfo(item, 5);
         count++;
       }
     }
   }
 
-  if(count > 0){
-    return;
-  } else {
+  if(count == 0){
     cout << "\nNo books currently checked out";
   }
 }
@@ -219,7 +230,8 @@ void openCard(multimap<int, Person *> & myCardholders, int nextID) {
   cin >> lastName;
 
   personPtr = new Person(firstName, lastName, nextID, act);
-  myCardholders.insert(pair<int,Person *>(mapKey, personPtr));
+  myCardholders.insert(pair<int, Person *>(mapKey, personPtr));
+  delete personPtr;
 
   auto mapIter = myCardholders.equal_range(mapKey);
   auto vecIter = mapIter.first;
@@ -229,16 +241,14 @@ void openCard(multimap<int, Person *> & myCardholders, int nextID) {
     vecIter++;
   }
 
-  cout << "\n" << item->fullName() <<
-          " (Card ID " << item->getId() <<
+  cout << "\n" << item->fullName() << " (Card ID " << item->getId() <<
           ") is now active";
 
-  delete personPtr;
   return;
 }
 
 // 7
-void closeCard(Person * tmpPerson) {
+void deactivateCard(Person * tmpPerson) {
 
   char response;
 
@@ -261,20 +271,19 @@ void closeCard(Person * tmpPerson) {
   } else {
     cout << "ERROR: ";
     cout << tmpPerson->fullName() << "\'s account is already inactive!";
-    return;
   }
-  return;
+
 }
 
 // 8
 void update(multimap<int, Person *> myCardholders, multimap<int, Book *> myBooks) {
 
-  /**Writing to persons.txt file**/
+  // Writing to persons.txt file
   ofstream myPFile("persons.txt");
 
   for(int i = 0; i < HASH_SIZE; ++i) {
     auto mapIter = myCardholders.equal_range(i);
-    for( auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter ) {
+    for(auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter) {
       auto const& item = vecIter->second;
       myPFile << item->getId() << " "
               << item->isActive() << " "
@@ -283,14 +292,13 @@ void update(multimap<int, Person *> myCardholders, multimap<int, Book *> myBooks
   }
 
   myPFile.close();
-  /*******************************/
 
-  /**Writing to rentals.txt file**/
+  // Writing to rentals.txt file
   ofstream myRFile("rentals.txt");
 
   for(int i = 0; i < HASH_SIZE; ++i) {
     auto mapIter = myBooks.equal_range(i);
-    for( auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter ) {
+    for(auto vecIter = mapIter.first; vecIter != mapIter.second; ++vecIter) {
       auto const& item = vecIter->second;
       if(item->getPersonPtr() != nullptr) {
         myRFile << item->getId() << " "
@@ -300,7 +308,6 @@ void update(multimap<int, Person *> myCardholders, multimap<int, Book *> myBooks
   }
 
   myRFile.close();
-  /*******************************/
 }
 
 /******************************************************************************/
@@ -314,12 +321,12 @@ void printMenu() {
     cout << "4.  View all outstanding rentals" << endl;
     cout << "5.  View outstanding rentals for a cardholder" << endl;
     cout << "6.  Open new library card" << endl;
-    cout << "7.  Close library card" << endl;
+    cout << "7.  Deactive library card" << endl;
     cout << "8.  Exit system\n\n";
     cout << "Please enter a choice: ";
 }
 
-void readBooks(multimap< int, Book *> & myBooks) {
+void readBooks(multimap<int, Book *> & myBooks) {
 
     string strBookID, title, author, category;
 
@@ -342,7 +349,7 @@ void readBooks(multimap< int, Book *> & myBooks) {
     return;
 }
 
-int readPersons(multimap< int, Person *> & myCardholders) {
+int readPersons(multimap<int, Person *> & myCardholders) {
 
     string fName, lName;
     int cardNum, act, mapKey;
@@ -367,7 +374,7 @@ int readPersons(multimap< int, Person *> & myCardholders) {
     return nextID;
 }
 
-void readRentals(multimap< int, Book *> myBooks, multimap< int, Person * > myCardholders) {
+void readRentals(multimap<int, Book *> myBooks, multimap<int, Person *> myCardholders) {
 
   ifstream myFile;
   int bookID, cardID;
@@ -388,8 +395,8 @@ void readRentals(multimap< int, Book *> myBooks, multimap< int, Person * > myCar
 
 int main() {
 
-    multimap< int, Book * > mmapBooks;
-    multimap< int, Person *> mmapCardholders;
+    multimap<int, Book *> mmapBooks;
+    multimap<int, Person *> mmapCardholders;
 
     int nextID = readPersons(mmapCardholders);
     readBooks(mmapBooks);
@@ -436,8 +443,8 @@ int main() {
                 break;
 
             case 7:
-                // Close library card
-                closeCard(askForIdRetPersonPtr(mmapCardholders));
+                // Deactivate library card
+                deactivateCard(askForIdRetPersonPtr(mmapCardholders));
                 break;
 
             case 8:
