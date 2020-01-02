@@ -1,8 +1,8 @@
 CXX = g++ -std=c++17 -Wall
 
 all: clean
-	${CXX} checkoutHash.cpp -o checkout_test
-	./checkout_test
+	${CXX} checkoutMMap.cpp -o checkoutMMap_test
+	./checkoutMMap_test
 
 clean:
-	rm -f checkout_test
+	rm -f checkoutMMap_test
